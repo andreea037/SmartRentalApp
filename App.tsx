@@ -1,117 +1,99 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
+import 'react-native-gesture-handler'; // Gesture handler necesar pentru navigare
 import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { SafeAreaView, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import Icon from 'react-native-vector-icons/MaterialIcons'; // Pentru iconuri
+import { Alert } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+// Creăm componentele pentru cele două ferestre
+const InchiriazaScreen = () => (
+  <SafeAreaView style={styles.container}>
+    <Text style={styles.text}>Inchiriaza</Text>
+  </SafeAreaView>
+);
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+
+const ReciclezaScreen = () => (
+  <SafeAreaView style={styles.container}>
+    <Text style={styles.text}>Recicleaza</Text>
+  </SafeAreaView>
+);
+
+// Tipuri pentru navigare
+type RootStackParamList = {
+  Home: undefined;
+  Inchiriaza: undefined;
+  Recicleaza: undefined;
+};
+
+const HomeScreen = ({ navigation }: { navigation: any }) => {
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Smart Rental App</Text>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Inchiriaza')}>
+        <Text style={styles.buttonText}>Inchiriaza</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Recicleaza')}>
+        <Text style={styles.buttonText}>Recicleaza</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
-}
+};
+
+const Stack = createStackNavigator<RootStackParamList>();
+
+const App = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen 
+          name="Home" 
+          component={HomeScreen} 
+          options={{
+            title: 'Meniu',
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => Alert.alert('Menu button pressed')}>
+                <Icon name="menu" size={30} color="black" style={{ marginLeft: 15 }} />
+              </TouchableOpacity>
+            ),
+          }} 
+        />
+        <Stack.Screen name="Inchiriaza" component={InchiriazaScreen} />
+        <Stack.Screen name="Recicleaza" component={ReciclezaScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    backgroundColor: '#F5DEB3',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  title: {
+    fontSize: 32,
+    color: '#00008B',
+    marginBottom: 20,
   },
-  sectionDescription: {
-    marginTop: 8,
+  button: {
+    backgroundColor: '#00008B',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 20,
+    width: '80%',
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
     fontSize: 18,
-    fontWeight: '400',
   },
-  highlight: {
-    fontWeight: '700',
+  text: {
+    fontSize: 24,
+    color: '#00008B',
   },
 });
 

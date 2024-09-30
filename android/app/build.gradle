@@ -107,8 +107,15 @@ android {
     }
 }
 
+// Asigură-te că acest bloc este înainte de dependencies
+project.ext.vectoricons = [
+    iconFontNames: [ 'MaterialIcons.ttf' ] // Adăugăm fonturile necesare
+]
+
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+
 dependencies {
-    // The version of react-native is set by the React Native Gradle Plugin
+    // Versiunea de React Native este setată de pluginul Gradle al React Native
     implementation("com.facebook.react:react-android")
 
     if (hermesEnabled.toBoolean()) {
